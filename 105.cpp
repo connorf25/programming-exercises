@@ -22,9 +22,15 @@ int main()
 	}
 	// Add final 0 to represent end of last building
 	height_map.push_back(0);
+	bool isFirst = true;
 	for (int i = 1; i < height_map.size(); i++) {
 		if(height_map[i-1] != height_map[i]) {
-			cout << i << " " << height_map[i] << " ";
+			if (!isFirst) {
+				cout << " ";
+			}
+			cout << i << " " << height_map[i];
+			isFirst = false;
 		}
 	}
+	cout << endl;
 }
