@@ -45,4 +45,8 @@ for line in contents:
 				if sum < minimumSum:
 					minimumSum = sum
 					minimumOrder = "".join(binOrder)
+				if sum == minimumSum:
+					newOrder = "".join(binOrder)
+					if newOrder < minimumOrder:
+						minimumOrder = newOrder
 	print(minimumOrder, minimumSum)
