@@ -44,7 +44,7 @@ int main() {
 	// Define points and edges of graph
 	vector<Point> points;
 	priority_queue<Edge> edges;
-	unordered_set<int> grouped_points;
+	unordered_map<int, int> grouped_points;
 	// Push each line to points
 	while(fscanf(stdin,"%d %d", &lineX, &lineY)==2) {
 		Point newPoint(lineX, lineY);
@@ -60,10 +60,26 @@ int main() {
 		edges.pop();
 		// If either point is already grouped
 		if (grouped_points.count(current.n1_index) || grouped_points.count(current.n2_index)) {
-			max_dist = max(max_dist, current.distance);
+			int min_dist = 9999999;
+			vector<int> g1_points = { current.n1_index };
+			vector<int> g2_points = { current.n2_index };
+			if (grouped_points.count(current.n1_index)) {
+				g1_points.push_back(grouped_points.at(current.n1_index));
+			}
+			if (grouped_points.count(current.n2_index)) {
+				g2_points.push_back(grouped_points.at(current.n2_index));
+			}
+			for (auto& x : g1_points) {
+				for (auto& y : g2_points) {
+					min_dist = min(min_dist, calcDistance(points[x], points[y]));
+				}
+			}
+			max_dist = max(max_dist, min_dist);
 		} else {
-			grouped_points.insert(current.n1_index);
-			grouped_points.insert(current.n2_index);
+			// Group together
+			grouped_points.insert(pair<int, int>(current.n1_index, current.n2_index));
+			grouped_points.insert(pair<int, int>(current.n2_index, current.n1_index));
+			// TODO: For each edge node_index, remove all distances except for minimum
 		}
 	}
 	cout << max_dist << endl;
